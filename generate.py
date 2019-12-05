@@ -136,6 +136,8 @@ def main():
     args = get_arguments()
     started_datestring = "{0:%Y-%m-%dT%H-%M-%S}".format(datetime.now())
     logdir = os.path.join(args.logdir, 'generate', started_datestring)
+    if not os.path.exists(logdir):
+        os.makedirs(logdir)
     with open(args.wavenet_params, 'r') as config_file:
         wavenet_params = json.load(config_file)
 
@@ -261,6 +263,7 @@ def main():
     # Save the result as an audio summary.
     datestring = str(datetime.now()).replace(' ', 'T')
     writer = tf.summary.FileWriter(logdir)
+    # writer = tf.train.SummaryWriter(logdir)
     tf.summary.audio('generated', decode, wavenet_params['sample_rate'])
     summaries = tf.summary.merge_all()
     summary_out = sess.run(summaries,
