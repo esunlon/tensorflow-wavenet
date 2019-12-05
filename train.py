@@ -1,5 +1,4 @@
 """Training script for the WaveNet network on the VCTK corpus.
-
 This script trains a network with the WaveNet using data from the VCTK corpus,
 which can be freely downloaded at the following site (~10 GB):
 http://homepages.inf.ed.ac.uk/jyamagis/page3/page58/page58.html
@@ -112,9 +111,6 @@ def save(saver, sess, logdir, step):
     print('Storing checkpoint to {} ...'.format(logdir), end="")
     sys.stdout.flush()
 
-    if not os.path.exists(logdir):
-        os.makedirs(logdir)
-
     saver.save(sess, checkpoint_path, global_step=step)
     print(' Done.')
 
@@ -171,6 +167,8 @@ def validate_directories(args):
     if logdir is None:
         logdir = get_default_logdir(logdir_root)
         print('Using default logdir: {}'.format(logdir))
+    if not os.path.exists(logdir):
+        os.makedirs(logdir)
 
     restore_from = args.restore_from
     if restore_from is None:
